@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Ocorrências - Defesa Civil</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="ui-container">
+        <header>
+            <h1>Ocorrências POA</h1>
+            <p id="status-text">Carregando dados...</p>
+        </header>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label for="color-mode">Agrupar Cores:</label>
+                <select id="color-mode" style="background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); color: var(--text-main); border-radius: 4px; padding: 4px; outline: none; font-size: 0.85rem;">
+                    <option value="natureza" style="color: black;">Natureza</option>
+                    <option value="orgao" style="color: black;">Orgão (Em breve)</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="date-start">Data Inicial:</label>
+                <input type="date" id="date-start">
+            </div>
+            <div class="filter-group">
+                <label for="date-end">Data Final:</label>
+                <input type="date" id="date-end">
+            </div>
+            <button id="btn-export" class="export-btn">📥 Exportar Relatório</button>
+            <div class="filter-group" style="margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; flex-direction: column; align-items: stretch; gap: 5px;">
+                <label style="font-weight: 600;">Importar Shapefile (.zip)</label>
+                <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between;">
+                    <input type="file" id="shp-upload" accept=".zip" style="font-size: 0.75rem; flex-grow: 1; max-width: 60%;">
+                    
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                            <label for="shp-fill" style="font-size: 0.65rem; color: var(--text-main); cursor: pointer;">Preencher</label>
+                            <input type="checkbox" id="shp-fill" checked style="cursor: pointer;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                            <label for="shp-color" style="font-size: 0.65rem; color: var(--text-main);">Cor</label>
+                            <input type="color" id="shp-color" value="#ff7800" title="Cor do Shapefile" style="cursor: pointer; width: 40px; height: 30px; border: 1px solid var(--glass-border); border-radius: 4px; background: rgba(255,255,255,0.1);">
+                        </div>
+                    </div>
+                </div>
+                <small style="font-size: 0.65rem; color: #94a3b8;">* Faça upload de um arquivo .zip contendo .shp, .shx, .dbf</small>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="btn-markers" class="active">📍 Marcadores</button>
+            <button id="btn-heatmap">🔥 Mapa de Calor</button>
+            <button id="btn-satellite">🌍 Satélite (Mapa)</button>
+        </div>
+        
+        <div id="stats">
+            <div class="stat-box">
+                <span class="stat-value" id="count-mapped">0</span>
+                <span class="stat-label">Endereços</span>
+            </div>
+            <div class="stat-box" id="queue-box" style="display: none;">
+                <span class="stat-value" id="count-queue">0</span>
+                <span class="stat-label">Processando...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container da Legenda -->
+    <div id="legend-container">
+        <h3>Natureza das Ocorrências</h3>
+        <div id="legend-items"></div>
+    </div>
+
+    <!-- Container do Mapa -->
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- Leaflet Heatmap JS -->
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    
+    <!-- Libraries for Shapefile and PDF -->
+    <script src="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
